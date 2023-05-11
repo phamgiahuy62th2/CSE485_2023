@@ -1,28 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Danh sách sinh viên</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+    </style>
 </head>
 <body>
-    Bài Tập Thực Hành 1 <br>
-    
-    <form action="/action_page.php" style="margin: 50px 0px">
-        <label for="lname">STT:</label><br>
-        <input type="text" id="lname" name="lname" value="Doe"><br><br>
-        <label for="fname">Full Name:</label><br>
-        <input type="text" id="fname" name="fname" value="John"><br>
-        <input type="submit" value="Submit">
-    </form>
-
     <?php
-        $file = fopen('public\List_of_student.txt', 'r');
-        while(!feof($file)) {
-            $line = fgets($file);
-            echo $line . "<br>";
+    // Đọc dữ liệu từ file và lưu vào danh sách sinh viên
+    $students = array();
+    $file = fopen("students.txt", "r");
+    if ($file) {
+        while (($line = fgets($file)) !== false) {
+            $data = explode("\t", $line);
+            $student = array(
+                'id' => trim($data[0]),
+                'name' => trim($data[1]),
+                'age' => trim($data[2])
+            );
+            $students[] = $student;
         }
+        fclose($file);
+    }
     ?>
+
+    <h1>Danh sách sinh viên</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Họ và tên</th>
+            <th>Tuổi</th>
+        </tr>
+        <?php foreach ($students as $student) : ?>
+            <tr>
+                <td><?php echo $student['id']; ?></td>
+                <td><?php echo $student['name']; ?></td>
+                <td><?php echo $student['age']; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
 </body>
 </html>
